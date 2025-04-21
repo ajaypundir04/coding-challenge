@@ -73,7 +73,7 @@ public class MoreSolutions {
     }
 
     // 26. Min Stack
-    class MinStack {
+    public class MinStack {
         private Stack<Integer> stack;
         private Stack<Integer> minStack;
 

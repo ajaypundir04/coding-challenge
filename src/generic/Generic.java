@@ -1,5 +1,9 @@
 package generic;
 
+import java.util.Arrays;
+import java.util.HashMap;
+import java.util.Map;
+
 public class Generic {
     public static int firstUniqCharStream(String s) {
         return s.chars()
@@ -73,7 +77,34 @@ public class Generic {
         return dp[target];
     }
 
+    // Coin Change (O(amount * coins))
+    public int coinChange(int[] coins, int amount) {
+        int[] dp = new int[amount + 1];
+        Arrays.fill(dp, amount + 1);
+        dp[0] = 0;
+        for (int i = 1; i <= amount; i++) {
+            for (int coin : coins) {
+                if (i >= coin) {
+                    dp[i] = Math.min(dp[i], dp[i - coin] + 1);
+                }
+            }
+        }
+        return dp[amount] > amount ? -1 : dp[amount];
+    }
 
+
+    // Two Sum (O(n))
+    public int[] twoSum(int[] nums, int target) {
+        Map<Integer, Integer> map = new HashMap<>();
+        for (int i = 0; i < nums.length; i++) {
+            int complement = target - nums[i];
+            if (map.containsKey(complement)) {
+                return new int[]{map.get(complement), i};
+            }
+            map.put(nums[i], i);
+        }
+        return new int[]{};
+    }
     public static void main(String[] args) {
         System.out.println(firstUniqCharStream("hheeloo"));
         System.out.println(countCastles(new int[]{2,1,3,2}));
