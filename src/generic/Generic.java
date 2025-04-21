@@ -13,6 +13,7 @@ public class Generic {
                 .map(s::indexOf)
                 .orElse(-1);
     }
+
     public static int countCastles(int[] heights) {
         if (heights == null || heights.length == 0) return 0;
         if (heights.length == 1) return 1;
@@ -40,21 +41,31 @@ public class Generic {
         return castles;
     }
 
+    public static int removeDuplicates(int[] nums) {
+        if (nums.length == 0) return 0;
+        int write = 1;
+        for (int read = 1; read < nums.length; read++) {
+            if (nums[read] != nums[write - 1]) {
+                nums[write++] = nums[read];
+            }
+        }
+        return write;
+    }
 
     public static int rob(int[] nums) {
         if (nums == null || nums.length == 0) return 0;
         if (nums.length == 1) return nums[0];
 
-        int skip = 0; // Max sum if we skip current house
-        int take = nums[0]; // Max sum if we take current house
+        int skip = 0;
+        int take = nums[0];
 
         for (int i = 1; i < nums.length; i++) {
             int prevSkip = skip;
-            skip = Math.max(skip, take); // Skip current, keep best of prior skip/take
-            take = prevSkip + nums[i];   // Take current, add to prior skip
+            skip = Math.max(skip, take);
+            take = prevSkip + nums[i];
         }
 
-        return Math.max(skip, take); // Best of final skip or take
+        return Math.max(skip, take);
     }
 
     public static int numRollsToTarget(int n, int k, int target) {
@@ -77,8 +88,7 @@ public class Generic {
         return dp[target];
     }
 
-    // Coin Change (O(amount * coins))
-    public int coinChange(int[] coins, int amount) {
+    public static int coinChange(int[] coins, int amount) {
         int[] dp = new int[amount + 1];
         Arrays.fill(dp, amount + 1);
         dp[0] = 0;
@@ -92,9 +102,7 @@ public class Generic {
         return dp[amount] > amount ? -1 : dp[amount];
     }
 
-
-    // Two Sum (O(n))
-    public int[] twoSum(int[] nums, int target) {
+    public static int[] twoSum(int[] nums, int target) {
         Map<Integer, Integer> map = new HashMap<>();
         for (int i = 0; i < nums.length; i++) {
             int complement = target - nums[i];
@@ -105,11 +113,60 @@ public class Generic {
         }
         return new int[]{};
     }
-    public static void main(String[] args) {
-        System.out.println(firstUniqCharStream("hheeloo"));
-        System.out.println(countCastles(new int[]{2,1,3,2}));
-        System.out.println(rob(new int[]{2,7,9,3,1}));
-        System.out.println(numRollsToTarget(2,6,11));
+
+    public static int findLargestDigit(String numStr) {
+        int maxDigit = 0;
+        for (char c : numStr.toCharArray()) {
+            if (!Character.isDigit(c)) throw new IllegalArgumentException("Non-digit found");
+            maxDigit = Math.max(maxDigit, c - '0');
+        }
+        return maxDigit;
     }
 
+    public static void main(String[] args) {
+        // firstUniqCharStream
+        System.out.println("firstUniqCharStream:");
+        System.out.println(firstUniqCharStream("hheeloo")); // Expected: 4 (first 'l')
+        System.out.println(firstUniqCharStream("aabb"));    // Expected: -1
+
+        // countCastles
+        System.out.println("\ncountCastles:");
+        System.out.println(countCastles(new int[]{2, 1, 3, 2})); // Expected: 4 (each peak/valley)
+        System.out.println(countCastles(new int[]{5, 5, 5}));    // Expected: 0
+
+        // removeDuplicates
+        System.out.println("\nremoveDuplicates:");
+        int[] dupArray = {1, 1, 2, 2, 3};
+        int len = removeDuplicates(dupArray);
+        System.out.println("New length: " + len); // Expected: 3
+        System.out.println("Modified array: " + Arrays.toString(Arrays.copyOf(dupArray, len))); // [1, 2, 3]
+
+        // rob
+        System.out.println("\nrob:");
+        System.out.println(rob(new int[]{2, 7, 9, 3, 1})); // Expected: 12
+        System.out.println(rob(new int[]{1, 2, 3, 1}));    // Expected: 4
+
+        // numRollsToTarget
+        System.out.println("\nnumRollsToTarget:");
+        System.out.println(numRollsToTarget(2, 6, 7)); // Expected: 6
+        System.out.println(numRollsToTarget(1, 6, 3)); // Expected: 1
+
+        // coinChange
+        System.out.println("\ncoinChange:");
+        System.out.println(new Generic().coinChange(new int[]{1, 2, 5}, 11)); // Expected: 3
+        System.out.println(new Generic().coinChange(new int[]{2}, 3));        // Expected: -1
+
+        // twoSum
+        System.out.println("\ntwoSum:");
+        System.out.println(Arrays.toString(twoSum(new int[]{2, 7, 11, 15}, 9))); // Expected: [0, 1]
+
+        // findLargestDigit
+        System.out.println("\nfindLargestDigit:");
+        System.out.println(findLargestDigit("538291")); // Expected: 9
+        try {
+            System.out.println(findLargestDigit("12a45")); // Should throw exception
+        } catch (Exception e) {
+            System.out.println(e.getMessage()); // Expected: Non-digit found
+        }
+    }
 }
